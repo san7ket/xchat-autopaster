@@ -82,7 +82,7 @@ def messagebuffer(dunno):
 def do_pastie(contents, filename):
     url = 'https://api.github.com/gists'
     params = json.dumps({
-        "description": "the description for this gist",
+        "description": "This gist has been auto-generated from Xchat",
         "public": True,
         "files": {
             filename: {
