@@ -1,12 +1,16 @@
 """
 This module for Xchat has been written by Stephen "TheCodeAssassin" Hoogendijk.
 
+
+
 It's largely inspired by (now defunct) module copypastebin plugin
+
+Modified to use as0 to paste instead of gist
 """
 
-__module_name__ = "Copypastegist"
-__module_version__ = "1.0.0"
-__module_description__ = "A script that automatically pastebins multiline pastes."
+__module_name__ = "Xchat-Autopaster"
+__module_version__ = "1.0.1"
+__module_description__ = "A script that automatically pastes multiline text and returns a URL."
 
 #Telling the user we loaded the plugin
 print "\0034", __module_name__, __module_version__, "has been loaded\003"
@@ -70,8 +74,8 @@ def messagebuffer(dunno):
         for i in tmplist:
             str_ += i + "\n"
 
-        filename = 'file %d' % random.randint(0, 99999999)
-        pastie_url = do_pastie(str_[:-1], filename)
+        # do the paste
+        pastie_url = do_pastie(str_[:-1])
 
         xchat.command("PRIVMSG %s :%s" % (xchat.get_info('channel'), pastie_url))
         xchat.emit_print("Your Message", xchat.get_info('nick'), pastie_url, "@")
@@ -79,23 +83,15 @@ def messagebuffer(dunno):
         return 0  # Return 0 so we don't repeat the timer.
 
 # returns URL
-def do_pastie(contents, filename):
-    url = 'https://api.github.com/gists'
-    params = json.dumps({
-        "description": "This gist has been auto-generated from Xchat",
-        "public": True,
-        "files": {
-            filename: {
-                "content": contents
-            }
-        }
-    })
+def do_pastie(contents):
+    url = 'http://as0.nl'
 
-    req = urllib2.Request(url, params, {"Content-type": "application/json"})
+    req = urllib2.Request(url, data=contents)
+    req.get_method = lambda: 'PUT'
     response = urllib2.urlopen(req)
 
     pastie_obj = json.load(response)
-    pastie_url = pastie_obj['html_url']
+    pastie_url = pastie_obj['result']['fileUrl']
 
     return pastie_url
 
