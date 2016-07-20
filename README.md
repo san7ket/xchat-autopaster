@@ -10,6 +10,10 @@ Xchat plugin for auto pasting multiple line entries to pastebin and returns a UR
 Installation
 ===
 
+Don't Forget to edit the pastebin url at "Line 89" in the script.
+
+Load plugin in xchat from Menu xchat -> Load plugin or script.
+ 
 Installation is simple, just select Load plugin from the Xchat menu. It's also possible to do it from the command-line with
 the following command: /py load <filename>.
 
