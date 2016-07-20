@@ -1,7 +1,10 @@
 """
 This module for Xchat has been written by Stephen "TheCodeAssassin" Hoogendijk.
 
-
+Modified By:
+Sanket Jagtap
+Abhijeet Kasurde
+Bhavik Bhavsar
 
 It's largely inspired by (now defunct) module copypastebin plugin
 
@@ -15,13 +18,13 @@ __module_description__ = "A script that automatically pastes multiline text and 
 #Telling the user we loaded the plugin
 print "\0034", __module_name__, __module_version__, "has been loaded\003"
 
+
 #Importing necessary modules
 import xchat
 import json
-import urllib2
 import shelve
 import random
-
+import requests
 
 #Load persistent config file
 settings = shelve.open("copypastegist.conf", writeback=True)
@@ -84,14 +87,20 @@ def messagebuffer(dunno):
 
 # returns URL
 def do_pastie(contents):
-    url = 'http://as0.nl'
+    url = 'http://paste.example.com/pastebin.php'
 
-    req = urllib2.Request(url, data=contents)
-    req.get_method = lambda: 'PUT'
-    response = urllib2.urlopen(req)
+    c = {}
+    c['email'] = 1
+    c['paste'] = 1
+    c['remember'] = 1
+    c['poster'] = xchat.get_info('nick')
+    # Uncomment for Python format
+    # c['format'] = 'python'
+    c['expiry'] = 'm'
+    c['code2'] = contents
 
-    pastie_obj = json.load(response)
-    pastie_url = pastie_obj['result']['fileUrl']
+    response = requests.post(url, data=c)
+    pastie_url = response.url
 
     return pastie_url
 
