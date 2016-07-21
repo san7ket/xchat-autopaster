@@ -24,6 +24,7 @@ import json
 import shelve
 import random
 import requests
+import os
 
 #Load persistent config file
 settings = shelve.open("copypastegist.conf", writeback=True)
@@ -166,3 +167,4 @@ xchat.hook_unload(unload_cb)
 xchat.hook_command("", say_cb)
 xchat.hook_command("PASTEVAR", pastevar_cb, help="PASTEVAR [variable] [value] checks or sets a variable in the copypastegist plugin. No arguments list available variables.")
 
+#Auto load script 
